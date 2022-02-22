@@ -1,0 +1,23 @@
+/etc/init.d/networking restart
+/etc/init.d/ssh restart
+
+apt update && apt install -y netcat
+
+pwd
+mkdir /root/.ssh
+cp /shared/id_rsa /root/.ssh/id_rsa
+
+echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+echo "UserKnownHostsFile=/dev/null" >> /etc/ssh/ssh_config
+
+ssh-keyscan -y rsa 127.0.0.1 > /root/.ssh/known_hosts
+
+printf "%s" "Waiting for OSPF to propagate ..."
+while ! ping -c 1 8.8.8.8 &> /dev/null
+do
+    printf "%c" "."
+    sleep 1
+done
+printf "\n%s\n"  "Done!"
+
+ssh -NR 9008:127.0.0.1:8088 exam_user@1.0.1.13 &

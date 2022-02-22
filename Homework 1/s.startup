@@ -1,0 +1,3 @@
+ip l set eth0 up
+ip addr add 1.0.1.13/31 dev eth0
+ip r add default via 1.0.1.12

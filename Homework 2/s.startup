@@ -1,0 +1,36 @@
+/etc/init.d/networking restart
+/etc/init.d/ssh restart
+ip route add default via 1.0.1.12
+
+pwd
+mkdir /root/.ssh
+cp /shared/id_rsa /root/.ssh/id_rsa
+
+echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+
+apt update
+apt install -y openvpn
+
+mkdir -p /dev/net
+mknod /dev/net/tun c 10 200
+chmod 600 /dev/net/tun
+
+touch /root/s.key
+touch /root/s.crt
+touch /root/ca.crt
+
+cat /shared/vpn/s.key > /root/s.key
+cat /shared/vpn/s.crt > /root/s.crt
+cat /shared/vpn/ca.crt > /root/ca.crt
+cat /shared/vpn/client.conf > /root/client.conf
+
+
+
+#cp /hostlab/s/root/client.conf /root/client.conf
+
+
+chmod 600 /root/s.key
+
+#openvpn /root/client.conf & 
+
+
